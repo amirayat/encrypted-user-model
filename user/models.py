@@ -2,12 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
-from encrypted_model_fields.fields import EncryptedCharField, EncryptedEmailField
 
 
 class CustomUserModel(AbstractUser):
     """
-    encrypted user model
+    plain text user model
     """
 
     username_validator = UnicodeUsernameValidator()
@@ -24,13 +23,13 @@ class CustomUserModel(AbstractUser):
             "unique": _("A user with that username already exists."),
         },
     )
-    first_name = EncryptedCharField(
+    first_name = models.CharField(
         _("first name"), max_length=150, blank=True)
-    last_name = EncryptedCharField(_("last name"), max_length=150, blank=True)
-    email = EncryptedEmailField(_("email address"), blank=True, unique=True)
-    phone = EncryptedCharField(_("mobile phone"), max_length=13)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    email = models.EmailField(_("email address"), blank=True, unique=True)
+    phone = models.CharField(_("mobile phone"), max_length=13)
 
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
-        db_table = "encrypted_users"
+        db_table = "plaintext_users"
