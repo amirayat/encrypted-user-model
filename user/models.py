@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedEmailField
+from hashid_field import HashidAutoField
 
 
 class CustomUserModel(AbstractUser):
@@ -12,6 +13,7 @@ class CustomUserModel(AbstractUser):
 
     username_validator = UnicodeUsernameValidator()
 
+    id = HashidAutoField(primary_key=True)
     username = models.CharField(
         _("username"),
         max_length=150,

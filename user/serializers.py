@@ -1,6 +1,7 @@
 from rest_framework.serializers import CharField
 from djoser.conf import settings
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from hashid_field.rest import HashidSerializerCharField
 
 from .models import CustomUserModel
 
@@ -17,7 +18,6 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         model = CustomUserModel
         fields = tuple(CustomUserModel.REQUIRED_FIELDS) + (
             settings.LOGIN_FIELD,
-            settings.USER_ID_FIELD,
             "password",
             "first_name",
             "last_name",
@@ -29,6 +29,7 @@ class CustomUserSerializer(UserSerializer):
     """
     user serializer
     """
+    id = HashidSerializerCharField(source_field='user.CustomUserModel.id')
     class Meta:
         model = CustomUserModel
         fields = tuple(CustomUserModel.REQUIRED_FIELDS) + (
@@ -38,4 +39,7 @@ class CustomUserSerializer(UserSerializer):
             "last_name",
             "phone"
         )
-        read_only_fields = (settings.LOGIN_FIELD,)
+        read_only_fields = (
+            settings.LOGIN_FIELD,
+            settings.USER_ID_FIELD,
+        )

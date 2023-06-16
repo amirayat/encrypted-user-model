@@ -125,13 +125,14 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+# https://github.com/nshafer/django-hashid-field
 
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'hashid_field.BigHashidAutoField'
 
 
 # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#substituting-a-custom-user-model
@@ -139,7 +140,7 @@ AUTH_USER_MODEL = 'user.CustomUserModel'
 
 
 # https://pypi.org/project/django-encrypted-model-fields/
-FIELD_ENCRYPTION_KEY = os.getenv('FIELD_ENCRYPTION_KEY')
+FIELD_ENCRYPTION_KEY=os.getenv('FIELD_ENCRYPTION_KEY')
 
 # https://djoser.readthedocs.io/en/latest/authentication_backends.html
 REST_FRAMEWORK = {
@@ -165,3 +166,8 @@ DJOSER = {
         'current_user': 'user.serializers.CustomUserSerializer',
     }
 }
+
+
+# https://pypi.org/project/django-hashid-field/
+HASHID_FIELD_SALT=os.getenv('HASHID_FIELD_SALT')
+ASHID_FIELD_ALLOW_INT_LOOKUP = True
