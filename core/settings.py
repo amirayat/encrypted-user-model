@@ -158,9 +158,6 @@ PRIVATE_PGP_KEY_PATH = os.path.abspath(os.path.join(BASE_DIR, 'private.key'))
 PUBLIC_PGP_KEY = open(PUBLIC_PGP_KEY_PATH).read()
 PRIVATE_PGP_KEY = open(PRIVATE_PGP_KEY_PATH).read()
 
-# Used by TextHMACField and PGPSymmetricKeyField if not specified by the db
-PGCRYPTO_KEY = os.getenv('PGCRYPTO_KEY')
-
 # https://djoser.readthedocs.io/en/latest/authentication_backends.html
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
