@@ -13,7 +13,7 @@ class CustomUserModel(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
     id = HashidAutoField(primary_key=True)
-    username = fields.CharPGPSymmetricKeyField(
+    username = fields.CharPGPPublicKeyField(
         _("username"),
         max_length=150,
         unique=True,
@@ -25,11 +25,11 @@ class CustomUserModel(AbstractUser):
             "unique": _("A user with that username already exists."),
         },
     )
-    first_name = fields.CharPGPSymmetricKeyField(
+    first_name = fields.CharPGPPublicKeyField(
         _("first name"), max_length=150, blank=True)
-    last_name = fields.CharPGPSymmetricKeyField(_("last name"), max_length=150, blank=True)
-    email = fields.EmailPGPSymmetricKeyField(_("email address"), blank=True, unique=True)
-    phone = fields.CharPGPSymmetricKeyField(_("mobile phone"), max_length=13)
+    last_name = fields.CharPGPPublicKeyField(_("last name"), max_length=150, blank=True)
+    email = fields.EmailPGPPublicKeyField(_("email address"), blank=True, unique=True)
+    phone = fields.CharPGPPublicKeyField(_("mobile phone"), max_length=13)
 
     class Meta:
         verbose_name = _("user")
