@@ -1,8 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
-from encrypted_model_fields.fields import EncryptedCharField, EncryptedEmailField
+from pgcrypto import fields
 from hashid_field import HashidAutoField
 
 
@@ -14,7 +13,7 @@ class CustomUserModel(AbstractUser):
     username_validator = UnicodeUsernameValidator()
 
     id = HashidAutoField(primary_key=True)
-    username = models.CharField(
+    username = fields.CharPGPSymmetricKeyField(
         _("username"),
         max_length=150,
         unique=True,
@@ -26,11 +25,11 @@ class CustomUserModel(AbstractUser):
             "unique": _("A user with that username already exists."),
         },
     )
-    first_name = EncryptedCharField(
+    first_name = fields.CharPGPSymmetricKeyField(
         _("first name"), max_length=150, blank=True)
-    last_name = EncryptedCharField(_("last name"), max_length=150, blank=True)
-    email = EncryptedEmailField(_("email address"), blank=True, unique=True)
-    phone = EncryptedCharField(_("mobile phone"), max_length=13)
+    last_name = fields.CharPGPSymmetricKeyField(_("last name"), max_length=150, blank=True)
+    email = fields.EmailPGPSymmetricKeyField(_("email address"), blank=True, unique=True)
+    phone = fields.CharPGPSymmetricKeyField(_("mobile phone"), max_length=13)
 
     class Meta:
         verbose_name = _("user")

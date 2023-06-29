@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'encrypted_model_fields',
+    'pgcrypto',
     'rest_framework',
     'drf_yasg',
     'djoser',
@@ -84,10 +84,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+DB_ENGINE = os.getenv('DB_ENGINE', None)
+DB_USERNAME = os.getenv('DB_USERNAME', None)
+DB_PASS = os.getenv('DB_PASS', None)
+DB_HOST = os.getenv('DB_HOST', None)
+DB_PORT = os.getenv('DB_PORT', None)
+DB_NAME = os.getenv('DB_NAME', None)
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.' + DB_ENGINE,
+        'NAME': DB_NAME,
+        'USER': DB_USERNAME,
+        'PASSWORD': DB_PASS,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 
@@ -139,8 +150,16 @@ DEFAULT_AUTO_FIELD = 'hashid_field.BigHashidAutoField'
 AUTH_USER_MODEL = 'user.CustomUserModel'
 
 
-# https://pypi.org/project/django-encrypted-model-fields/
-FIELD_ENCRYPTION_KEY=os.getenv('FIELD_ENCRYPTION_KEY')
+# https://github.com/incuna/django-pgcrypto-fields
+PUBLIC_PGP_KEY_PATH = os.path.abspath(os.path.join(BASE_DIR, 'public.key'))
+PRIVATE_PGP_KEY_PATH = os.path.abspath(os.path.join(BASE_DIR, 'private.key'))
+
+# Used by PGPPublicKeyField used by default if not specified by the db
+PUBLIC_PGP_KEY = open(PUBLIC_PGP_KEY_PATH).read()
+PRIVATE_PGP_KEY = open(PRIVATE_PGP_KEY_PATH).read()
+
+# Used by TextHMACField and PGPSymmetricKeyField if not specified by the db
+PGCRYPTO_KEY = os.getenv('PGCRYPTO_KEY')
 
 # https://djoser.readthedocs.io/en/latest/authentication_backends.html
 REST_FRAMEWORK = {
@@ -152,7 +171,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
 DJOSER = {
@@ -169,5 +188,5 @@ DJOSER = {
 
 
 # https://pypi.org/project/django-hashid-field/
-HASHID_FIELD_SALT=os.getenv('HASHID_FIELD_SALT')
+HASHID_FIELD_SALT = os.getenv('HASHID_FIELD_SALT')
 ASHID_FIELD_ALLOW_INT_LOOKUP = True
